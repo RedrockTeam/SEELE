@@ -1,0 +1,23 @@
+{
+  "name": "seele",
+  "version": "1.0.0",
+  "description": "api system",
+  "main": "seele.js",
+  "dependencies": {
+    "cheerio": "^0.19.0",
+    "co-body": "^4.0.0",
+    "iconv": "^2.1.10",
+    "koa": "^1.0.0",
+    "koa-hbs": "^0.7.0",
+    "koa-route": "^2.4.2",
+    "koa-session": "^3.3.1",
+    "mongoose": "^4.1.7",
+    "request-promise": "^0.4.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ling.",
+  "license": "MIT"
+}
