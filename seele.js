@@ -40,16 +40,12 @@ app.use(hbs.middleware({
 //check plugins
 var plugins = [];
 config.enabledPlugins.forEach(function (plugin) {
-    try {
-        var handler = require(__dirname + '/controllers/' + plugin);
-        plugins.push({
-            name: plugin,
-            handler: handler,
-            method: handler.method || 'post'
-        });
-    } catch (e) {
-        throw new Error('pls check plugin ' + plugin + ' is ready.');
-    }
+    var handler = require(__dirname + '/controllers/' + plugin);
+    plugins.push({
+        name: plugin,
+        handler: handler,
+        method: handler.method || 'post'
+    });
 });
 //load plugins
 plugins.forEach(function (plugin) {
