@@ -2,7 +2,7 @@
 
 var cheerio = require('cheerio'),
     rp = require('request-promise'),
-    Iconv = require('Iconv').Iconv,
+    Iconv = require('iconv').Iconv,
     iconv = new Iconv('GBK', 'UTF-8//TRANSLIT//IGNORE'),
     kebiaoModel = require('./model'),
     config = require('./config');
