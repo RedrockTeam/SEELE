@@ -25,14 +25,15 @@ app.use(logger);
 //2. 响应时间
 app.use(responseTime);
 
+//3.body parser
 app.use(function* (next) {
     this.request.body = yield parse.form(this);
     yield next;
 });
-//3. session
+//4. session
 app.use(session(app))
 
-//4. ready hdb
+//5. ready hbs
 app.use(hbs.middleware({
     viewPath: __dirname + '/views'
 }));

@@ -39,7 +39,8 @@ var hash_course = ["一二节","三四节","五六节","七八节","九十节","
  * @param  {Number}   xh       [学号]
  * @param  {Number}   week       [周数]
  */
-function* KebiaoCore (xh, week) {
+var fs = require('fs');
+function* KebiaoCore (xh) {
 	if(!xh) return {success: false, info: "wrong xh"};
 
     var remoteResponse = yield rp({
@@ -104,11 +105,7 @@ function* KebiaoCore (xh, week) {
         console.log('Parse error: ', e);
         return {success: false, info: "Parse error"};
     }
-
-    return resultWrapper({
-        xh: xh,
-        week: week
-    }, resultData);
+    return resultWrapper({xh: xh}, resultData);
 }
 
 function judgePeriod(str){
@@ -191,9 +188,8 @@ function resultWrapper (option, arr) {
         version: version,
         term: defaultTerm,
         stuNum: option.xh,
-        data: weekFilter(option.week, arr)
+        data: weekFilter(0, arr)
     };
 }
-
 
 module.exports = KebiaoCore;

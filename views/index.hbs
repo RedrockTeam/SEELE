@@ -6,6 +6,15 @@
 </head>
 <body>
 {{title}}
-<a href="/logout">logout</a>
+<a href="/seele/logout">logout</a>
+{{#each loggerData}}
+    <div>
+        <div>plugin: {{plugin}}</div>
+        <div>datetime: {{time}}</div>
+        <div>responseTime: {{responseTime}}ms</div>
+        <div>useCache: {{useCache}}</div>
+        <div>----</div>
+    </div>
+{{/each}}
 </body>
 </html>

@@ -7,9 +7,9 @@
 var KebiaoCore = require('./kebiao');
 var KebiaoModel = require('./model');
 var KebiaoConfig = require("./config");
+var queryLoop = [];
 
 module.exports = function* (next) {
-    var self = this;
     this.set('Access-Control-Allow-Origin', 'http://hongyan.cqupt.edu.cn'); //CORS
     var body = this.request.body;
 
@@ -38,7 +38,7 @@ function* kebiao (xh, week) {
     var kbInDb = yield KebiaoModel.findOne({stuNum: xh}, null, {sort: [{'outOfDateTimestamp': -1}]}).exec();
 
     if ( !kbInDb || kbInDb.outOfDateTimestamp < new Date().getTime() ){
-        var data = kbInDb = yield KebiaoCore(xh, week);
+        var data = kbInDb = yield KebiaoCore(xh);
         if (!data || !data.success)
             return this.body = data;
         //Mongodb STORAGE
@@ -53,15 +53,15 @@ function* kebiao (xh, week) {
         kbInDb = kbInDb.toObject();
     }
 
-    //filter week
-    if(week) {
-        var tmpData = [];
-        kbInDb.data.forEach(function (i) {
-            if (i.week.indexOf(week) > -1)return tmpData.push(i);
-        });
-        kbInDb.data = tmpData;
-    }
-
     kbInDb.nowWeek = KebiaoCore.getNowWeek();
+    kbInDb.data = weekFilter(week, kbInDb.data);
     return kbInDb;
+}
+
+function weekFilter(week, arr){
+    week = parseInt(week) || 0;
+    return arr.filter(function (item) {
+        if(week == 0) return true;
+        return item.week.indexOf(week) > -1;
+    });
 }

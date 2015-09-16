@@ -3,17 +3,20 @@
  * @Author Ling.
  * @Email i@zeroling.com
  */
+var LoggerModel = require('../models/logger'),
+    config = require('../config'),
+    moment = require('moment');
 
-var config = require('../config');
+moment.locale('zh-CN');
 
 function check (username, password) {
     return config && config.username == username && config.password == password;
 }
 
 module.exports = function* (next) {
-    if (this.path == '/logout') {
+    if (this.path == '/seele/logout') {
         this.session.authed = null;
-        return this.redirect('/admin');
+        return this.redirect('/seele/admin');
     }
 
     var body = this.request.body;
@@ -23,10 +26,15 @@ module.exports = function* (next) {
         if (check(body.username, body.password)) {
             this.session.authed = true;
         }
-        return this.redirect('/admin');
+        return this.redirect('/seele/admin');
     } else if (this.session.authed) {
         //登陆的
-        yield this.render('index', {title: 'koa-hbs'});
+        var loggerData = yield LoggerModel.find({plugin: 'kebiao'}, {}, {limit: 5, sort: {datetime: -1}}).exec();
+        var showData = loggerData.map(function (log) {
+            log.time = moment(log.datetime).format('YYYY年M月D日 HH:mm:ss');
+            return log;
+        });
+        yield this.render('index', {title: 'koa-hbs', loggerData: showData});
     } else {
         //未登陆的
         yield this.render('login', {title: 'login'});

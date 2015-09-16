@@ -8,13 +8,12 @@ var LoggerModel = require('../models/logger');
 
 module.exports = function* (next) {
     yield next;
-    var log = new LoggerModel({
+    var logObj = {
         plugin: this.request.plugin,
         queryBody: this.request.body,
         datetime: +new Date,
         useCache: !!this.response.get('X-Cached'),
         responseTime: parseInt(this.response.get('X-Response-Time'))
-    });
-    console.log(log);
-    //todo 存数据库
+    };
+    new LoggerModel(logObj).save();
 };
