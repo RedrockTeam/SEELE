@@ -32,6 +32,7 @@ module.exports = function* (next) {
         var loggerData = yield LoggerModel.find({plugin: 'kebiao'}, {}, {limit: 5, sort: {datetime: -1}}).exec();
         var showData = loggerData.map(function (log) {
             log.time = moment(log.datetime).format('YYYY年M月D日 HH:mm:ss');
+            log.queryBody = JSON.stringify(log.queryBody);
             return log;
         });
         yield this.render('index', {title: 'koa-hbs', loggerData: showData});
