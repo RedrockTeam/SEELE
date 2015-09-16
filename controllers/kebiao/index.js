@@ -7,7 +7,6 @@
 var KebiaoCore = require('./kebiao');
 var KebiaoModel = require('./model');
 var KebiaoConfig = require("./config");
-var queryLoop = [];
 
 module.exports = function* (next) {
     this.set('Access-Control-Allow-Origin', 'http://hongyan.cqupt.edu.cn'); //CORS
