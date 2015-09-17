@@ -137,7 +137,6 @@ function parseWeek (str) {
 
         resultArr[0].week = _w;
         resultArr[0].weekEnd = _w[_w.length - 1];
-
         return resultArr[0];
     }
 
@@ -173,7 +172,7 @@ function parseWeek (str) {
         week: week,
         weekModel: model,
         weekBegin: begin,
-        weekEnd: week[week.length - 1]
+        weekEnd: end
     };
 }
 
