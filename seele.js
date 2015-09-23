@@ -3,6 +3,9 @@
  * @Author Ling.
  * @Email i@zeroling.com
  */
+require('oneapm');
+//load ONEAPM
+
 var koa = require('koa'),
     config = require('./config'),
     Route = require('koa-route'),
