@@ -13,8 +13,10 @@ module.exports = function* (next) {
     var body = this.request.body;
 
     var xh = body.stuNum || body['stu_num'],
-        week = parseInt(body['week']);
-    var data = yield kebiao(xh, week);
+        week = parseInt(body['week']),
+        forceFetch = !!body['forceFetch'];
+    var data = yield kebiao(xh, week, forceFetch);
+    this.set('X-ForceFetch', '' + forceFetch);
     if (data._id) {
         this.set('X-Cached', data._id);
         delete data._id;
@@ -26,7 +28,7 @@ module.exports = function* (next) {
 /**
  * 插件主函数generator
  */
-function* kebiao (xh, week) {
+function* kebiao (xh, week, isForce) {
     week = week || 0;
     if(!xh || parseInt(xh) != xh) {	//NaN or parseInt截断的情况
         return this.body = {
@@ -34,7 +36,10 @@ function* kebiao (xh, week) {
             info: "stuNum not allowed"
         };
     }
-    var kbInDb = yield KebiaoModel.findOne({stuNum: xh}, null, {sort: [{'outOfDateTimestamp': -1}]}).exec();
+    var kbInDb;
+    if ( !isForce ) {
+        kbInDb = yield KebiaoModel.findOne({stuNum: xh}, null, {sort: [{'outOfDateTimestamp': -1}]}).exec();
+    }
 
     if ( !kbInDb || kbInDb.outOfDateTimestamp < new Date().getTime() ){
         var data = kbInDb = yield KebiaoCore(xh);
