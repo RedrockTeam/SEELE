@@ -7,7 +7,7 @@
     "instances": 0,
     "max_memory_restart": "1G",
     "autorestart": true,
-    "node_args": [],
+    "node_args": ["--harmony"],
     "args": [],
     "env": {
       "NODE_ENV": "production"
