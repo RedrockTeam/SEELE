@@ -44,7 +44,7 @@ function* KebiaoCore (xh) {
 	if(!xh) return {success: false, info: "wrong xh"};
 
     var remoteResponse = yield rp({
-        uri: "http://jwzx.cqupt.edu.cn/pubStuKebiao.php?xh=" + xh,
+        uri: "http://jwzx.cqupt.edu.cn/pubStuKebiao.php?xnxq=next&xh=" + xh,
         encoding: null
     }).then(function (body) {
         return iconv.convert(body);
