@@ -11,13 +11,15 @@ var map = [
     {start: 2015210001, end: 2015214779}
 ];
 
-map.forEach(function (chunk) {
+map.forEach(function* (chunk) {
     for (var itor = chunk.start; itor <= chunk.end; itor++) {
         var data = yield KebiaoCore(xh);
         if (data && data.success) {
-
+            var m = new kebiaoModel(data);
+            m.save(function(err){
+                if(err) return console.log(err);
+                console.log('Saved in mongodb', data.stuNum);
+            });
         }
     }
 });
-
-//todo
