@@ -15,7 +15,7 @@ map.forEach(function* (chunk) {
     for (var itor = chunk.start; itor <= chunk.end; itor++) {
         var data = yield KebiaoCore(xh);
         if (data && data.success) {
-            var m = new kebiaoModel(data);
+            var m = new KebiaoModel(data);
             m.save(function(err){
                 if(err) return console.log(err);
                 console.log('Saved in mongodb', data.stuNum);
