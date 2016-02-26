@@ -153,12 +153,12 @@ function parseWeek (str) {
 
     begin = begin || 1;
     end = end || 18;
-    if(str.indexOf('双周') >= 0){
+    if(str.indexOf('双') >= 0){
         model = 'double';
         begin = begin % 2 == 0 ? begin : begin + 1;
         for(var i = begin; i <= end; i += 2)
             week.push(i);
-    }else if(str.indexOf('单周') >= 0){
+    }else if(str.indexOf('单') >= 0){
         model = 'single';
         begin = begin % 2 == 1 ? begin : begin + 1;
         for(var i = begin; i <= end; i += 2)
