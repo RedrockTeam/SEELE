@@ -2,8 +2,7 @@
 
 var cheerio = require('cheerio'),
     rp = require('request-promise'),
-    Iconv = require('iconv').Iconv,
-    iconv = new Iconv('GBK', 'UTF-8//TRANSLIT//IGNORE'),
+    iconv = require('iconv-lite'),
     kebiaoModel = require('./model'),
     config = require('./config');
 
@@ -47,7 +46,7 @@ function* KebiaoCore (xh) {
         uri: "http://jwzx.cqupt.edu.cn/pubStuKebiao.php?&xh=" + xh,
         encoding: null
     }).then(function (body) {
-        return iconv.convert(body);
+        return iconv.decode(body, 'GBK');
     });
 
     var $ = cheerio.load(remoteResponse, {
