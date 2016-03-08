@@ -124,8 +124,8 @@ function parseWeek (str) {
 
     str = str.replace(/第/g, '').replace(/、/g, ',');
     var model, begin, end, t, week = [];
-    if(str.match(',')){
-        var strArr = str.split(',');
+    if(str.match(/\.|,/)){
+        var strArr = str.split(/\.|,/);
         var resultArr = [], _w = [];
         for(var i = 0, len =  strArr.length; i < len; i++){
             if (!strArr[i]) continue;
