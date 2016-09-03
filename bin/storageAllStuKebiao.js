@@ -5,10 +5,11 @@ var KebiaoModel = require('../controllers/kebiao/model');
 var config = require('../config');
 
 var stuMap = [
-    {start: 2012210001, end: 2012217193},
+    // {start: 2012210001, end: 2012217193},
     {start: 2013210001, end: 2013214501},
     {start: 2014210001, end: 2014214570},
-    {start: 2015210001, end: 2015214779}
+    {start: 2015210001, end: 2015214779},
+    {start: 2016210001, end: 2016215094}
 ];
 
 function* getKebiao (num) {
