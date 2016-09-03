@@ -70,15 +70,11 @@ function* KebiaoCore (xh) {
             if(ntd == 0) {
                 return; // 无用信息, 第一节第二节那一列
             }
-
-            // var item_element = $(this).html().split(/<font color=\"336699\">([\w\u4e00-\u9fa5]*)<\/font><br>/g);
             var item_element = $(this).html().split(/<hr>/g);
-            console.log(item_element);
             stuKebiao[ntd - 1].push(item_element);
         });
     });
 
-    console.log(stuKebiao[1]);
     try{
         for(var day = 0; day <= 6; day ++) {
             for (var course = 0; course <= 5; course++) {
@@ -131,7 +127,7 @@ function* KebiaoCore (xh) {
                         weekEnd: weekInfo.weekEnd || 17,
                         week: weekInfo.week || [],
                         // type: $("<div>" + c[4] + "</div>").text(),
-                        type: courseInfo[4].split(' ')[1],     //
+                        type: courseInfo[4].match(/\S[修|选]/g)[0],     //
                         // status: c[6] && c[6].split('选课状态:')[1]
                         status: '正常'    // 选课状态, 该字段在教务在线已无
                     };
@@ -148,8 +144,9 @@ function* KebiaoCore (xh) {
 }
 
 function judgePeriod(str){
-    if(str === '连上三节') return 3;
-    if(str === '连上四节') return 4;
+    console.log(str);
+    if(str === '3节连上') return 3;
+    if(str === '4节连上') return 4;
     return 2;
 }
 
