@@ -5,9 +5,16 @@
  */
 var KebiaoCore = require('../controllers/kebiao/kebiao');
 
+var args = process.argv.splice(2).map(v => ~~v);
+// console.log(args);
+
 function* getKebiao (num) {
     var data = yield* KebiaoCore(num);
-    console.log(data);
+
+    data.data.forEach( function(item, index) {
+        console.log(item);
+    });
+    console.log(data.data.length);
     return data;
 }
 
@@ -26,4 +33,5 @@ function runGen(genF, args) {
 
     run(gen.next());
 }
-runGen(getKebiao, [2014210014]);
+let stuNum =  args.length ? args : [2014210014];
+runGen(getKebiao, stuNum);

@@ -62,32 +62,57 @@ function* KebiaoCore (xh) {
     /* tbNormal 是普通课表 */
     var tbNormal = $($('table')[0]);
     tbNormal.find('tr').each(function (ntr) {
-        if(ntr == 0) return;
+        if(ntr === 0 || ntr === 3 || ntr === 6) {
+            return; // 无用的 tr 0 星期, 3 中午间歇, 6 下午间歇
+        };
 
         $(this).find('td').each(function (ntd) {
-            if(ntd == 0) return;
+            if(ntd == 0) {
+                return; // 无用信息, 第一节第二节那一列
+            }
 
             // var item_element = $(this).html().split(/<font color=\"336699\">([\w\u4e00-\u9fa5]*)<\/font><br>/g);
             var item_element = $(this).html().split(/<hr>/g);
+            console.log(item_element);
             stuKebiao[ntd - 1].push(item_element);
         });
     });
 
+    console.log(stuKebiao[1]);
     try{
         for(var day = 0; day <= 6; day ++) {
             for (var course = 0; course <= 5; course++) {
                 var cache;
+
                 stuKebiao[day][course].forEach(function (self, n){
+
                     /*if(n % 2){
                         cache.period = judgePeriod(self);
                         return resultData.push(cache);
                     }*/
                     // var c = self.toString().split(/<\w*>/g);
-                    var c = self.toString().replace(/(<[\s\S]+?>)/g, " ").split(/\s+/);
-
-                    if (!c[1]) return;
+                    var courseInfo = self.toString().split(/<br>/g).filter((v, index) => {
+                        return v !== '<br>';
+                    });
+                    courseInfo = courseInfo.map((item, index) => {
+                        return item.replace(/<\/*[\s\S]+?>/g, ' ').trim();
+                    })
+                    /*
+                    courseInfo: [ 
+                        'SK16181',
+                        '010801 -微处理器系统结构与嵌入式系统设计（1）',
+                        '地点：逸夫楼YF101',
+                        '1周,6-8周,13-16周 3节连上',
+                        '夏绪玖 必修 3.5学分' ]
+                     */
+                    
+                    // console.log(courseInfo);
+                    if (!courseInfo[1]) return; // 空数组返回
                     // var w = parseWeek(c[5]);
-                    var w = parseWeek(c[4]);
+                    // console.log(c);
+                    var weekInfo = parseWeek(courseInfo[3].split(' ')[0]);
+                    // console.log(courseInfo[2]);
+
                     var d = {
                         hash_day: day,
                         hash_lesson: course,
@@ -95,23 +120,23 @@ function* KebiaoCore (xh) {
                         day: hash_day[day],
                         lesson: hash_course[course],
                         // course: c[1],
-                        course: c[2].replace('-', ""),
+                        course: courseInfo[1].split('-')[1], // 课程名
                         // teacher: c[2] && c[2].trim(),
-                        teacher: c[5],
-                        classroom: c[3].replace('地点：', ""),
+                        teacher: courseInfo[4].split(' ')[0],  // 教师
+                        classroom: courseInfo[2].replace('地点：', ""), // 教室
                         // rawWeek: c[5],
-                        rawWeek: c[4],
-                        weekModel: w.weekModel || 'all',
-                        weekBegin: w.weekBegin || 1,
-                        weekEnd: w.weekEnd || 17,
-                        week: w.week || [],
+                        rawWeek: courseInfo[3].split(' ')[0],
+                        weekModel: weekInfo.weekModel || 'all',
+                        weekBegin: weekInfo.weekBegin || 1,
+                        weekEnd: weekInfo.weekEnd || 17,
+                        week: weekInfo.week || [],
                         // type: $("<div>" + c[4] + "</div>").text(),
-                        type: c[6],
+                        type: courseInfo[4].split(' ')[1],     //
                         // status: c[6] && c[6].split('选课状态:')[1]
-                        status: '正常'
+                        status: '正常'    // 选课状态, 该字段在教务在线已无
                     };
-                    cache = d;
-                    resultData.push(cache);
+                    d.period = judgePeriod(courseInfo[3].split(' ')[1]);
+                    resultData.push(d);
                 });
             }
         }
@@ -123,8 +148,8 @@ function* KebiaoCore (xh) {
 }
 
 function judgePeriod(str){
-    if(str == '连上三节') return 3;
-    if(str == '连上四节') return 4;
+    if(str === '连上三节') return 3;
+    if(str === '连上四节') return 4;
     return 2;
 }
 
