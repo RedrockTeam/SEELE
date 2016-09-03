@@ -1,4 +1,5 @@
 // 重邮课表插件 Ling. ES6 2015-09-15
+// 改了正则 Ming && Hangeer 2016-09-02
 
 var cheerio = require('cheerio'),
     rp = require('request-promise'),
@@ -40,13 +41,15 @@ var hash_course = ["一二节","三四节","五六节","七八节","九十节","
  */
 var fs = require('fs');
 function* KebiaoCore (xh) {
-	if(!xh) return {success: false, info: "wrong xh"};
+        if(!xh) return {success: false, info: "wrong xh"};
 
     var remoteResponse = yield rp({
-        uri: "http://jwzx.cqupt.edu.cn/pubStuKebiao.php?&xh=" + xh,
+        uri: "http://jwzx.cqupt.edu.cn/jwzxtmp/showKebiao.php?type=student&id=" + xh,
+        // uri: "http://jwzx.cqupt.edu.cn/pubStuKebiao.php?&xh=" + xh,
         encoding: null
     }).then(function (body) {
-        return iconv.decode(body, 'GBK');
+        // return iconv.decode(body, 'GBK');
+        return body;
     });
 
     var $ = cheerio.load(remoteResponse, {
@@ -60,9 +63,12 @@ function* KebiaoCore (xh) {
     var tbNormal = $($('table')[0]);
     tbNormal.find('tr').each(function (ntr) {
         if(ntr == 0) return;
+
         $(this).find('td').each(function (ntd) {
             if(ntd == 0) return;
-            var item_element = $(this).html().split(/<font color=\"336699\">([\w\u4e00-\u9fa5]*)<\/font><br>/g);
+
+            // var item_element = $(this).html().split(/<font color=\"336699\">([\w\u4e00-\u9fa5]*)<\/font><br>/g);
+            var item_element = $(this).html().split(/<hr>/g);
             stuKebiao[ntd - 1].push(item_element);
         });
     });
@@ -72,31 +78,40 @@ function* KebiaoCore (xh) {
             for (var course = 0; course <= 5; course++) {
                 var cache;
                 stuKebiao[day][course].forEach(function (self, n){
-                    if(n % 2){
+                    /*if(n % 2){
                         cache.period = judgePeriod(self);
                         return resultData.push(cache);
-                    }
-                    var c = self.toString().split(/<\w*>/g);
+                    }*/
+                    // var c = self.toString().split(/<\w*>/g);
+                    var c = self.toString().replace(/(<[\s\S]+?>)/g, " ").split(/\s+/);
+
                     if (!c[1]) return;
-                    var w = parseWeek(c[5]);
+                    // var w = parseWeek(c[5]);
+                    var w = parseWeek(c[4]);
                     var d = {
                         hash_day: day,
                         hash_lesson: course,
                         begin_lesson: 2 * course + 1,
                         day: hash_day[day],
                         lesson: hash_course[course],
-                        course: c[1],
-                        teacher: c[2] && c[2].trim(),
-                        classroom: c[3],
-                        rawWeek: c[5],
+                        // course: c[1],
+                        course: c[2].replace('-', ""),
+                        // teacher: c[2] && c[2].trim(),
+                        teacher: c[5],
+                        classroom: c[3].replace('地点：', ""),
+                        // rawWeek: c[5],
+                        rawWeek: c[4],
                         weekModel: w.weekModel || 'all',
                         weekBegin: w.weekBegin || 1,
                         weekEnd: w.weekEnd || 17,
                         week: w.week || [],
-                        type: $("<div>" + c[4] + "</div>").text(),
-                        status: c[6] && c[6].split('选课状态:')[1]
+                        // type: $("<div>" + c[4] + "</div>").text(),
+                        type: c[6],
+                        // status: c[6] && c[6].split('选课状态:')[1]
+                        status: '正常'
                     };
                     cache = d;
+                    resultData.push(cache);
                 });
             }
         }
@@ -122,8 +137,9 @@ function judgePeriod(str){
 function parseWeek (str) {
     if(!str || typeof str != 'string')return;
 
-    str = str.replace(/第/g, '').replace(/、/g, ',');
+    str = str.replace(/第/g, '').replace(/,/g, ',');
     var model, begin, end, t, week = [];
+
     if(str.match(/\.|,/)){
         var strArr = str.split(/\.|,/);
         var resultArr = [], _w = [];
