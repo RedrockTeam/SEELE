@@ -127,7 +127,7 @@ function* KebiaoCore (xh) {
                         weekEnd: weekInfo.weekEnd || 17,
                         week: weekInfo.week || [],
                         // type: $("<div>" + c[4] + "</div>").text(),
-                        type: courseInfo[4].match(/\S[修|选]/g)[0],     //
+                        type: courseInfo[4].match(/\S[修|选|践]/g)[0],     //
                         // status: c[6] && c[6].split('选课状态:')[1]
                         status: '正常'    // 选课状态, 该字段在教务在线已无
                     };

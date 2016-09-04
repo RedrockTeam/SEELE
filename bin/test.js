@@ -11,10 +11,7 @@ var args = process.argv.splice(2).map(v => ~~v);
 function* getKebiao (num) {
     var data = yield* KebiaoCore(num);
 
-    data.data.forEach( function(item, index) {
-        console.log(item);
-    });
-    console.log(data.data.length);
+    console.log(data);
     return data;
 }
 
