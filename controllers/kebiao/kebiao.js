@@ -144,7 +144,6 @@ function* KebiaoCore (xh) {
 }
 
 function judgePeriod(str){
-    console.log(str);
     if(str === '3节连上') return 3;
     if(str === '4节连上') return 4;
     return 2;
