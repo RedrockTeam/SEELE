@@ -33,5 +33,5 @@ function runGen(genF, args) {
 
     run(gen.next());
 }
-let stuNum =  args.length ? args : [2014210014];
+var stuNum =  args.length ? args : [2014210014];
 runGen(getKebiao, stuNum);
