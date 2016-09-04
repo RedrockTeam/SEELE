@@ -1,5 +1,7 @@
 // 重邮课表插件 Ling. ES6 2015-09-15
 // 改了正则 Ming && Hangeer 2016-09-02
+'use strict'; // ming
+
 
 var cheerio = require('cheerio'),
     rp = require('request-promise'),
@@ -78,36 +80,29 @@ function* KebiaoCore (xh) {
     try{
         for(var day = 0; day <= 6; day ++) {
             for (var course = 0; course <= 5; course++) {
-                var cache;
 
                 stuKebiao[day][course].forEach(function (self, n){
 
-                    /*if(n % 2){
-                        cache.period = judgePeriod(self);
-                        return resultData.push(cache);
-                    }*/
-                    // var c = self.toString().split(/<\w*>/g);
-                    var courseInfo = self.toString().split(/<br>/g).filter((v, index) => {
-                        return v !== '<br>';
-                    });
-                    courseInfo = courseInfo.map((item, index) => {
-                        return item.replace(/<\/*[\s\S]+?>/g, ' ').trim();
-                    })
-                    /*
-                    courseInfo: [ 
-                        'SK16181',
-                        '010801 -微处理器系统结构与嵌入式系统设计（1）',
-                        '地点：逸夫楼YF101',
-                        '1周,6-8周,13-16周 3节连上',
-                        '夏绪玖 必修 3.5学分' ]
-                     */
-                    
-                    // console.log(courseInfo);
+                    var courseInfo = self.split(/<[\s\S]*?>/);
                     if (!courseInfo[1]) return; // 空数组返回
-                    // var w = parseWeek(c[5]);
-                    // console.log(c);
-                    var weekInfo = parseWeek(courseInfo[3].split(' ')[0]);
-                    // console.log(courseInfo[2]);
+                    /*
+                    courseInfo :
+                        0   [ 'SK16181',
+                        1     '010801 -微处理器系统结构与嵌入式系统设计（1）',
+                        2     '地点：逸夫楼YF101 ',
+                        3     '1周,6-8周,13-16周',
+                        4     '3节连上',
+                        5     ' ',
+                        6     '',
+                        7     '夏绪玖 必修 3.5学分',
+                        8     '' ]
+                     */
+
+                    var weekInfo = parseWeek(courseInfo[3]);
+
+                    var teacherAndType = courseInfo[7].split(' '); 
+                    // ['夏绪玖', '必修', '3.5学分''] // 无教师的情况下, 1 为 ''
+
 
                     var d = {
                         hash_day: day,
@@ -115,23 +110,17 @@ function* KebiaoCore (xh) {
                         begin_lesson: 2 * course + 1,
                         day: hash_day[day],
                         lesson: hash_course[course],
-                        // course: c[1],
-                        course: courseInfo[1].split('-')[1], // 课程名
-                        // teacher: c[2] && c[2].trim(),
-                        teacher: courseInfo[4].split(' ')[0],  // 教师
-                        classroom: courseInfo[2].replace('地点：', ""), // 教室
-                        // rawWeek: c[5],
-                        rawWeek: courseInfo[3].split(' ')[0],
+                        course: courseInfo[1].replace(/[\s\S]+-/, ''),
+                        teacher: teacherAndType[0],
+                        classroom: courseInfo[2].replace('地点：', "").trim(),
+                        rawWeek: courseInfo[3],
                         weekModel: weekInfo.weekModel || 'all',
                         weekBegin: weekInfo.weekBegin || 1,
                         weekEnd: weekInfo.weekEnd || 17,
                         week: weekInfo.week || [],
-                        // type: $("<div>" + c[4] + "</div>").text(),
-                        type: courseInfo[4].match(/\S[修|选|践]/g)[0],     //
-                        // status: c[6] && c[6].split('选课状态:')[1]
-                        status: '正常'    // 选课状态, 该字段在教务在线已无
+                        type: teacherAndType[1],
+                        period: judgePeriod(courseInfo[4])
                     };
-                    d.period = judgePeriod(courseInfo[3].split(' ')[1]);
                     resultData.push(d);
                 });
             }
