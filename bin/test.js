@@ -11,8 +11,7 @@ var args = process.argv.splice(2).map(v => ~~v);
 function* getKebiao (num) {
     var data = yield* KebiaoCore(num);
 
-    console.info(data);
-    if(data.data) console.log( '课数', data.data.length);
+    console.log(data);
     return data;
 }
 

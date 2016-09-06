@@ -121,6 +121,14 @@ function* KebiaoCore (xh) {
                         type: teacherAndType[1],
                         period: judgePeriod(courseInfo[4])
                     };
+
+                    // 暂时解决体育课没名字的情况
+                    if(d.classroom === '运动场' && d.course === '') {
+                        d.course = '体育课';
+                    }
+
+
+
                     resultData.push(d);
                 });
             }
