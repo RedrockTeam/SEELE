@@ -127,7 +127,7 @@ function* KebiaoCore (xh) {
                         if(d.classroom === '运动场') {
                             d.course = '体育课';     
                         } else {
-                            d.course = courseInfo[1].replace(/-[\s\S]+/, '').trim();
+                            d.course = courseInfo[1].replace(/-/, '').trim();
                         }
                     }
 
