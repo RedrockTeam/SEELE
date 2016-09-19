@@ -123,9 +123,14 @@ function* KebiaoCore (xh) {
                     };
 
                     // 暂时解决体育课没名字的情况
-                    if(d.classroom === '运动场' && d.course === '') {
-                        d.course = '体育课';
+                    if(d.course === '') {
+                        if(d.classroom === '运动场') {
+                            d.course = '体育课';     
+                        } else {
+                            d.course = courseInfo[1].replace(/-[\s\S]+/, '').trim();
+                        }
                     }
+
 
 
 
