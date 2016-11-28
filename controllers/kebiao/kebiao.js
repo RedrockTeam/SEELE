@@ -104,6 +104,10 @@ function* KebiaoCore (xh) {
                     // ['夏绪玖', '必修', '3.5学分''] // 无教师的情况下, 1 为 ''
 
 
+
+                    var course_num = courseInfo[1].match(/[^-]+/);
+                    course_num = typeof course_num[0] === 'string' ? course_num[0].trim() : '';
+
                     var d = {
                         hash_day: day,
                         hash_lesson: course,
@@ -111,6 +115,7 @@ function* KebiaoCore (xh) {
                         day: hash_day[day],
                         lesson: hash_course[course],
                         course: courseInfo[1].replace(/[\s\S]+-/, ''),
+                        course_num: course_num, //课程号
                         teacher: teacherAndType[0],
                         classroom: courseInfo[2].replace('地点：', "").trim(),
                         rawWeek: courseInfo[3],
