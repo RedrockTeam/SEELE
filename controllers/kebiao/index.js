@@ -38,7 +38,7 @@ function* kebiao (xh, week, isForce) {
     }
     var kbInDb;
     if ( !isForce ) {
-        kbInDb = yield KebiaoModel.findOne({stuNum: xh}, null, {sort: [{'outOfDateTimestamp': -1}]}).exec();
+        kbInDb = yield KebiaoModel.findOne({stuNum: xh, term: KebiaoConfig.defaultTerm}, null, {sort: [{'outOfDateTimestamp': -1}]}).exec();
     }
 
     if ( !kbInDb || kbInDb.outOfDateTimestamp < new Date().getTime() ){
