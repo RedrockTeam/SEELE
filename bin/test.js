@@ -12,6 +12,7 @@ function* getKebiao (num) {
     var data = yield* KebiaoCore(num);
 
     console.log(data);
+    console.log(num, '一周有', data.data.length, '节课');
     return data;
 }
 

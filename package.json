@@ -20,7 +20,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "NODE_ENV=dev node seele.js",
+    "start": "node seele.js"
   },
   "author": "Ling.",
   "license": "MIT"

@@ -66,6 +66,9 @@ app.use(Route.get(['/seele/logout', '/seele/admin'], admin));
 app.use(Route.post('/seele/admin', admin));
 
 //Connect MongoDB
+// dev don't connect mongodb
 mongoose.connect(config.dsn);
 
-app.listen(config.port || 3000);
+var port = config.port || 3000
+app.listen(port);
+console.log('server run at', port);

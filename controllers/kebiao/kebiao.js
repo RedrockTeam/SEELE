@@ -46,8 +46,7 @@ function* KebiaoCore (xh) {
         if(!xh) return {success: false, info: "wrong xh"};
 
     var remoteResponse = yield rp({
-        uri: "http://jwzx.cqupt.edu.cn/jwzxtmp/showKebiao.php?type=student&id=" + xh,
-        // uri: "http://jwzx.cqupt.edu.cn/pubStuKebiao.php?&xh=" + xh,
+        uri: "http://jwzx.cqupt.edu.cn/jwzxtmp/kebiao/kb_stu.php?xh=" + xh,
         encoding: null
     }).then(function (body) {
         // return iconv.decode(body, 'GBK');
@@ -58,16 +57,18 @@ function* KebiaoCore (xh) {
         ignoreWhitespace: true,
         decodeEntities: false //坑啊！！！
     });
+
     var resultData = [],
         stuKebiao = [[],[],[],[],[],[],[]];
 
+    // console.log($('').html())
     /* tbNormal 是普通课表 */
-    var tbNormal = $($('table')[0]);
-    tbNormal.find('tr').each(function (ntr) {
+    var tbNormal = $($('.printTable table')[0])
+
+    tbNormal.find('tr').each(function (ntr, item) {
         if(ntr === 0 || ntr === 3 || ntr === 6) {
             return; // 无用的 tr 0 星期, 3 中午间歇, 6 下午间歇
         };
-
         $(this).find('td').each(function (ntd) {
             if(ntd == 0) {
                 return; // 无用信息, 第一节第二节那一列
@@ -82,6 +83,8 @@ function* KebiaoCore (xh) {
             for (var course = 0; course <= 5; course++) {
 
                 stuKebiao[day][course].forEach(function (self, n){
+
+                    
 
                     var courseInfo = self.split(/<[\s\S]*?>/);
                     if (!courseInfo[1]) return; // 空数组返回
