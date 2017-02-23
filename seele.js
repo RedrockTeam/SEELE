@@ -54,7 +54,7 @@ config.enabledPlugins.forEach(function (plugin) {
 });
 //load plugins
 plugins.forEach(function (plugin) {
-    app.use(Route[plugin.method]('/seele/api/'  + plugin.name, function* (next) {
+    app.use(Route[plugin.method]('/'  + plugin.name, function* (next) {
         this.request.plugin = plugin.name;
         yield plugin.handler;
         yield next;
