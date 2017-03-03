@@ -30,12 +30,18 @@ module.exports = function* (next) {
  */
 function* kebiao (xh, week, isForce) {
     week = week || 0;
+
     if(!xh || parseInt(xh) != xh) {	//NaN or parseInt截断的情况
-        return this.body = {
-            success: false,
-            info: "stuNum not allowed"
-        };
+        if(xh.toString().length === 10) {
+        } else {
+            return this.body = {
+                success: false,
+                info: "stuNum not allowed"
+            };
+        }
     }
+
+
     var kbInDb;
     if ( !isForce ) {
         kbInDb = yield KebiaoModel.findOne({stuNum: xh, term: KebiaoConfig.defaultTerm}, null, {sort: [{'outOfDateTimestamp': -1}]}).exec();
