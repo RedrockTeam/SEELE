@@ -47,6 +47,9 @@ function* kebiao (xh, week, isForce) {
             return this.body = data;
         //Mongodb STORAGE
         if(data.data && data.data.length !== 0) {
+            // 删除之前的旧数据, 避免
+            KebiaoModel.remove({stuNum: xh, term: KebiaoConfig.defaultTerm})
+                .catch(console.error)
             var options = {expire: KebiaoConfig.mongodbExpire};
             data.cachedTimestamp = new Date().getTime();
             data.outOfDateTimestamp = data.cachedTimestamp + options.expire;

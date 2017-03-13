@@ -4,7 +4,7 @@
 module.exports = {
 	version: "16.9.4",
     defaultTerm: '2016-2017学年第2学期',
-    mongodbExpire: 1 * 6 *  3600 * 1000,// mongodb 缓存时间
+    mongodbExpire: 7 * 24 *  3600 * 1000,// mongodb 缓存时间
     //第二个参数0表示一月份!!!!!!!!!
     termStart: new Date(2017, 1, 27), //  每学期修改，开学第一周的星期一的日子，年，月，日，。
     stuMap: [     // 学生学号 bin/storage......里面要用的, 爬所有课表写来
