@@ -60,6 +60,7 @@ function* kebiao (xh, week, isForce) {
         kbInDb = kbInDb.toObject();
     }
 
+    //kbInDb.nowWeek = KebiaoCore.getNowWeek() < 0 ? 0 : KebiaoCore.getNowWeek();
     kbInDb.nowWeek = KebiaoCore.getNowWeek();
     kbInDb.data = weekFilter(week, kbInDb.data);
     return kbInDb;
