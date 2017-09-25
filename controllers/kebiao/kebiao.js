@@ -98,6 +98,7 @@ function* KebiaoCore (xh) {
                         5     ' ',
                         6     '',
                         7     '夏绪玖 必修 3.5学分',
+                        7.1   'Stephanie Banos 必修 2.0学分'
                         8     '' ]
                      */
 
@@ -105,6 +106,7 @@ function* KebiaoCore (xh) {
 
                     var teacherAndType = courseInfo[7].split(' '); 
                     // ['夏绪玖', '必修', '3.5学分''] // 无教师的情况下, 1 为 ''
+                    // ['Stephanie', 'Banos', '必修', '3.5学分'']
 
 
 
@@ -126,7 +128,7 @@ function* KebiaoCore (xh) {
                         weekBegin: weekInfo.weekBegin || 1,
                         weekEnd: weekInfo.weekEnd || 17,
                         week: weekInfo.week || [],
-                        type: teacherAndType[1],
+                        type: teacherAndType.length === 4 ? teacherAndType[2] :  teacherAndType[1],
                         period: judgePeriod(courseInfo[4])
                     };
 
