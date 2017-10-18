@@ -83,9 +83,6 @@ function* KebiaoCore (xh) {
             for (var course = 0; course <= 5; course++) {
 
                 stuKebiao[day][course].forEach(function (self, n){
-
-                    
-
                     var courseInfo = self.split(/<[\s\S]*?>/);
                     if (!courseInfo[1]) return; // 空数组返回
                     /*
@@ -108,7 +105,7 @@ function* KebiaoCore (xh) {
                     // ['夏绪玖', '必修', '3.5学分''] // 无教师的情况下, 1 为 ''
                     // ['Stephanie', 'Banos', '必修', '3.5学分'']
 
-
+                    if (courseInfo[3] === '无安排') return;
 
                     var course_num = courseInfo[1].match(/[^-]+/);
                     course_num = typeof course_num[0] === 'string' ? course_num[0].trim() : '';
@@ -140,10 +137,6 @@ function* KebiaoCore (xh) {
                             d.course = courseInfo[1].replace(/-/, '').trim();
                         }
                     }
-
-
-
-
                     resultData.push(d);
                 });
             }
