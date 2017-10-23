@@ -73,7 +73,7 @@ function* KebiaoCore (xh) {
             if(ntd == 0) {
                 return; // 无用信息, 第一节第二节那一列
             }
-            var item_element = $(this).html().split(/<hr>/g);
+            var item_element = $(this).html().split(/<\/div>/g);
             stuKebiao[ntd - 1].push(item_element);
         });
     });
@@ -85,6 +85,8 @@ function* KebiaoCore (xh) {
                 stuKebiao[day][course].forEach(function (self, n){
                     var courseInfo = self.split(/<[\s\S]*?>/);
                     if (!courseInfo[1]) return; // 空数组返回
+                    courseInfo.shift();
+
                     /*
                     courseInfo :
                         0   [ 'SK16181',
@@ -97,7 +99,7 @@ function* KebiaoCore (xh) {
                         7     '夏绪玖 必修 3.5学分',
                         7.1   'Stephanie Banos 必修 2.0学分'
                         8     '' ]
-                     */
+                    */
 
                     var weekInfo = parseWeek(courseInfo[3]);
 
