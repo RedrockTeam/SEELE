@@ -9,7 +9,7 @@ var KebiaoModel = require('./model');
 var KebiaoConfig = require("./config");
 
 module.exports = function* (next) {
-    this.set('Access-Control-Allow-Origin', 'http://hongyan.cqupt.edu.cn'); //CORS
+    this.set('Access-Control-Allow-Origin', 'http://hongyan.cqupt.edu.cn, https://hongyan.cqupt.edu.cn'); //CORS
     var body = this.request.body;
 
     var xh = body.stuNum || body['stu_num'],

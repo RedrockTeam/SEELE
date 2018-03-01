@@ -29,8 +29,6 @@ var TERM_START = config.termStart; //有坑, 看上面注释
 function getNowWeek(callback){
     var w = Math.ceil((new Date() - TERM_START)/(1000*3600*24*7));
     callback && callback(w);
-    w = w > 25 ? 0 : w;
-    w = w < 0 ? 0 : w;
     return w;
 }
 KebiaoCore.getNowWeek = getNowWeek;
@@ -71,12 +69,13 @@ function* KebiaoCore (xh) {
         if(ntr === 0 || ntr === 3 || ntr === 6) {
             return; // 无用的 tr 0 星期, 3 中午间歇, 6 下午间歇
         };
-        $(this).find('td').each(function (ntd) {
+        $(this).find('div').each(function (ntd) {
             if(ntd == 0) {
                 return; // 无用信息, 第一节第二节那一列
             }
-            var item_element = $(this).html().split(/<\/div>/g);
+            var item_element = $(this).html().split(/<hr>/g);
             stuKebiao[ntd - 1].push(item_element);
+
         });
     });
 
@@ -87,8 +86,6 @@ function* KebiaoCore (xh) {
                 stuKebiao[day][course].forEach(function (self, n){
                     var courseInfo = self.split(/<[\s\S]*?>/);
                     if (!courseInfo[1]) return; // 空数组返回
-                    courseInfo.shift();
-
                     /*
                     courseInfo :
                         0   [ 'SK16181',
@@ -102,10 +99,16 @@ function* KebiaoCore (xh) {
                         7.1   'Stephanie Banos 必修 2.0学分'
                         8     '' ]
                     */
+                    courseInfo.shift();
+
+                    var result = [];
+                    for(var i = 0, len = data.length; i < len; i += 15){
+                        result.push(data.slice(i, i+15));
+                    }
 
                     var weekInfo = parseWeek(courseInfo[3]);
 
-                    var teacherAndType = courseInfo[7].split(' '); 
+                    var teacherAndType = courseInfo[8].split(' '); 
                     // ['夏绪玖', '必修', '3.5学分''] // 无教师的情况下, 1 为 ''
                     // ['Stephanie', 'Banos', '必修', '3.5学分'']
 
